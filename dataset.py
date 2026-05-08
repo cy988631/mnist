@@ -6,5 +6,11 @@ from torchvision import transforms
 
 transform = transforms.Compose([
     transforms.ToTensor()
-    transforms.Normalize()
+    transforms.Normalize((0.1307,),(0.3081,))
 ])
+train_dataset = dataset.MNIST(
+    root = 
+    train = True,
+    download = True,
+    
+)
