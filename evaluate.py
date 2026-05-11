@@ -18,6 +18,7 @@ total = 0
 
 with torch.no_grad():
     for X,y in test_loader:
+        X, y = X.to(device), y.to(device)
         outputs = model(X)
         _,predicted = torch.max(outputs,dim = 1)
         total += y.size(0)
