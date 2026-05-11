@@ -2,7 +2,14 @@ from dataset import test_loader
 from model import MLP 
 import torch
 
-model = MLP()
+if torch.cuda.is_available():
+    device = torch.device("cuda")
+elif torch.backends.mps.is_available():
+    device = torch.device("mps")
+else:
+    device = torch.device("cpu")
+
+model = MLP().to(device)
 model.load_state_dict(torch.load('mnist_MLP_model.pth'))
 model.eval()
 
