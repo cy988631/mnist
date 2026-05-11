@@ -16,6 +16,6 @@ for epoch in range(num_epoches):
         loss = criterion(outputs,y)
         loss.backward()
         optimizer.step()
-        print(f'Epoch{epoch+1},Loss:{loss.item():.4f}')
+    print(f'Epoch{epoch+1},Loss:{loss.item():.4f}')
         
 torch.save(model.state_dict(), 'mnist_MLP_model.pth')
