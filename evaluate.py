@@ -1,5 +1,5 @@
 from dataset import test_loader
-from mlp_model import MLP 
+from model_mlp import MLP 
 import torch
 from sklearn.metrics import confusion_matrix as con
 import matplotlib.pyplot as plt

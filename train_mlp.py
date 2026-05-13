@@ -3,7 +3,7 @@ from torch import nn
 from torch import optim
 from dataset import train_loader
 from dataset import test_loader
-from mlp_model import MLP
+from model_mlp import MLP
 import matplotlib.pyplot as plt
 
 if torch.cuda.is_available():
