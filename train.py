@@ -3,7 +3,7 @@ from torch import nn
 from torch import optim
 from dataset import train_loader
 from dataset import test_loader
-from model import MLP
+from mlp_model import MLP
 import matplotlib.pyplot as plt
 
 if torch.cuda.is_available():
@@ -51,7 +51,7 @@ for epoch in range(num_epochs):
     epoch_loss = running_loss/len(train_loader.dataset)
     train_losses.append(epoch_loss)
     print(f'Epoch{epoch+1},Loss:{epoch_loss:.4f}')
-        
+
 torch.save(model.state_dict(), 'mnist_MLP_model.pth')
 
 plt.figure()
@@ -69,4 +69,3 @@ plt.title('Accuracy Curve')
 plt.legend()
 
 plt.show()
-

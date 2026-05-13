@@ -1,6 +1,8 @@
 from dataset import test_loader
-from model import MLP 
+from mlp_model import MLP 
 import torch
+from sklearn.metrics import confusion_matrix as con
+import matplotlib.pyplot as plt
 
 if torch.cuda.is_available():
     device = torch.device("cuda")
@@ -12,7 +14,6 @@ else:
 model = MLP().to(device)
 model.load_state_dict(torch.load('mnist_MLP_model.pth'))
 model.eval()
-torch.no_grad()
 
 correct = 0
 total = 0
@@ -30,7 +31,14 @@ with torch.no_grad():
 
         predicted_numpy = predicted.cpu().numpy()
         y_numpy = y.cpu().numpy()
+        all_preds.extend(predicted_numpy)
+        all_labels.extend(y_numpy)
         
+    result = con(all_labels,all_preds)
     accuracy = correct/total
     
 print(f'准确率: {100 * accuracy:.2f}%')
+
+plt.imshow(result)
+plt.colorbar()
+plt.show()
