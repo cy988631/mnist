@@ -12,7 +12,7 @@ last_x = None
 last_y = None
 
 model = CNN().to('cpu')
-model.load_state_dict(torch.load("mnist_cnn_model.pth"))
+model.load_state_dict(torch.load("mnist_CNN_model.pth"))
 model.eval()
 
 def start_draw(event):
