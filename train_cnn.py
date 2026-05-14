@@ -52,7 +52,7 @@ for epoch in range(num_epochs):
     train_losses.append(epoch_loss)
     print(f'Epoch{epoch+1},Loss:{epoch_loss:.4f}')
 
-torch.save(model.state_dict(), 'mnist_MLP_model.pth')
+torch.save(model.state_dict(), 'mnist_CNN_model.pth')
 
 plt.figure()
 plt.plot(train_losses,label = 'Train Loss')
