@@ -1,5 +1,5 @@
 import tkinter as tk
-from PIL import Image
+from PIL import Image,ImageGrab
 import torch
 import numpy as np
 from model_cnn import CNN
@@ -26,30 +26,42 @@ def draw(event):
     global coord_label,last_x,last_y
     can.create_line(
         last_x,last_y,event.x,event.y,
-         width = 5,
-         fill = "black"
-        )
+        width = 5,
+        fill = "black"
+    )
     last_x = event.x
     last_y = event.y
 
 def pos():
-    can.postscript(file = "canvas.ps")
-    img = Image.open("canvas.ps")
+    x1 = can.winfo_rootx() + 100
+    y1 = can.winfo_rooty() + 100
+    x2 = x1 + 600
+    y2 = y1 + 600
+
+    img = ImageGrab.grab((x1, y1, x2, y2))
     img = img.convert("L")
     img = img.resize((28,28))
+    # img = img.point(lambda x:0 if x < 128 else 255)
+    # img.save('debug.png')
     
     img = np.array(img)
     img = 255-img
+    # img[img < 180] = 0
+    # img[img >= 180] = 255
+    Image.fromarray(img.astype(np.uint8)).save('debug.png')
     img = img/255.0
+    img = (img-0.1307)/0.3081
     
     img = torch.tensor(img).float()
     img = img.view(1, 1, 28, 28)
     
+    
     with torch.no_grad():
         output = model(img)
         predicted = output.argmax(dim=1)
-        
-    print(f'prediction:{predicted.item()}')
+    
+    print(x1,y1,x2,y2)
+    print(f'预测结果：{predicted.item()}')
     
 lab = tk.Label(root,text = 'please draw on it',font = ('Arial',12),bg = 'white',width = 15,height = 2)
 lab.pack()
