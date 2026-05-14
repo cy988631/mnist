@@ -46,6 +46,7 @@ def pos():
     
     img = np.array(img)
     img = 255-img
+    img = np.clip(img * 3, 0, 255).astype(np.uint8)
     # img[img < 180] = 0
     # img[img >= 180] = 255
     Image.fromarray(img.astype(np.uint8)).save('debug.png')
