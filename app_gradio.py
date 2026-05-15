@@ -21,12 +21,14 @@ def predict(input_data):
     img = img.view(1,1,28,28)
     
     with torch.no_grad():
-        output = model(img)
-        predicted = output.argmax(dim = 1)
-    return str(predicted.item())
+        output = model(img)/2
+        output = torch.softmax(output,dim =1).squeeze().numpy()
+        predicted = {str(i): float(output[i]) for i in range(len(output))}
+    return predicted
 
 gr.Interface(
     fn = predict,
     inputs = gr.Sketchpad(),
-    outputs = gr.Text()
+    outputs = gr.Label(num_top_classes = 10),
+    live =True
 ).launch(share = True) 
