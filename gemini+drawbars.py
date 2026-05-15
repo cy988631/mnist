@@ -18,25 +18,47 @@ last_x, last_y = None, None
 
 # --- 推理与更新 UI ---
 def update_prediction():
-    # 1. 截取画布区域
-    x1 = can.winfo_rootx()
-    y1 = can.winfo_rooty()
-    x2 = x1 + can.winfo_width()
-    y2 = y1 + can.winfo_height()
+    # # 1. 截取画布区域
+    # x1 = can.winfo_rootx()
+    # y1 = can.winfo_rooty()
+    # x2 = x1 + can.winfo_width()
+    # y2 = y1 + can.winfo_height()
 
-    img = ImageGrab.grab((x1, y1, x2, y2)).convert("L").resize((28, 28))
+    # img = ImageGrab.grab((x1, y1, x2, y2)).convert("L").resize((28, 28))
     
-    # 2. 预处理
-    img_np = np.array(img)
-    img_np = 255 - img_np  # 反转：黑底白字
-    img_np = np.clip(img_np * 3, 0, 255).astype(np.uint8) # 增强对比度
+    # # 2. 预处理
+    # img_np = np.array(img)
+    # img_np = 255 - img_np  # 反转：黑底白字
+    # img_np = np.clip(img_np * 3, 0, 255).astype(np.uint8) # 增强对比度
     
-    tensor_img = torch.tensor(img_np/255.0).float().view(1, 1, 28, 28)
-    tensor_img = (tensor_img - 0.1307) / 0.3081
+    # tensor_img = torch.tensor(img_np/255.0).float().view(1, 1, 28, 28)
+    # tensor_img = (tensor_img - 0.1307) / 0.3081
 
+    x1 = can.winfo_rootx() + 100
+    y1 = can.winfo_rooty() + 100
+    x2 = x1 + 600
+    y2 = y1 + 600
+
+    img = ImageGrab.grab((x1, y1, x2, y2))
+    img = img.convert("L")
+    img = img.resize((28,28))
+    # img = img.point(lambda x:0 if x < 128 else 255)
+    # img.save('debug.png')
+    
+    img = np.array(img)
+    img = 255-img
+    img = np.clip(img * 3, 0, 255).astype(np.uint8)
+    # img[img < 180] = 0
+    # img[img >= 180] = 255
+    Image.fromarray(img.astype(np.uint8)).save('debug.png')
+    img = img/255.0
+    img = (img-0.1307)/0.3081
+    
+    img = torch.tensor(img).float()
+    img = img.view(1, 1, 28, 28)
     # 3. 模型推理
     with torch.no_grad():
-        output = model(tensor_img)
+        output = model(img)
         # 数学逻辑：Softmax 得到概率
         probs = F.softmax(output[0], dim=0).numpy()
 
